@@ -1,0 +1,36 @@
+# -*- mode: snippet -*-
+# name: class with file name
+# key: fclass
+# --
+#ifndef ${3:_`(upcase (file-name-nondirectory (file-name-sans-extension (buffer-file-name))))`_H_}
+#define $3
+
+#include <boost/shared_ptr.hpp>
+
+namespace ${1:LSW_}{
+
+/**
+ * @class ${2:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`}
+ * 
+ */
+class $2{
+
+public:
+		$2(){}
+ 
+protected:
+
+private:
+
+};
+
+typedef boost::shared_ptr<$2> p$2;
+
+}//end of namespace
+
+#endif /*$3*/
+
+$0#include "$2.h"
+
+using namespace $1;
+

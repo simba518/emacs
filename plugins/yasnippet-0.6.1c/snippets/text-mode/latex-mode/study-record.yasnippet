@@ -1,0 +1,28 @@
+# -*- mode: snippet -*-
+# name: study-record
+# key: studyrecord
+# --
+\documentclass[final,5p,times]{elsarticle}
+\usepackage{amsmath}
+\newtheorem{theorem}{Remark}
+\setlength{\columnsep}{2em}
+
+\begin{document}
+
+\begin{frontmatter}
+  \title{Study Record: ${2:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`}}
+  \author{Siwang Li}
+  \begin{abstract}
+	
+  \end{abstract}
+\end{frontmatter}
+
+\section{Algorithm Details}
+
+\subsection{Algorithm Outline}
+
+\section{Conclusions}
+
+\subsection{Limitations}
+
+\end{document}

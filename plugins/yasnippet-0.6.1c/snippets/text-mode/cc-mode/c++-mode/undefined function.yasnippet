@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: undefined function
+# key: uf
+# --
+/// @todo undefined function
+Logger logger = Logger::getInstance(LOG4CPLUS_TEXT("${1:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`}"));
+const string msg=string("undefined function: ")+string(__PRETTY_FUNCTION__);
+LOG4CPLUS_WARN(logger, msg);

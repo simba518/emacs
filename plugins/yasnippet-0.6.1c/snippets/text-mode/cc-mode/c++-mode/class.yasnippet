@@ -1,0 +1,40 @@
+# -*- mode: snippet -*-
+# name: singleton with file name
+# key: singleton
+# --
+#ifndef ${3:_`(upcase (file-name-nondirectory (file-name-sans-extension (buffer-file-name))))`_H_}
+#define $3
+
+#include <boost/shared_ptr.hpp>
+
+namespace ${1:LSW_}{
+
+class ${2:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`}{
+
+public:
+	static boost::shared_ptr<${2:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`}> getInstance(){
+
+		if(p_instance == NULL){
+			p_instance = boost::shared_ptr<${2:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`}>(new ${2:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`}());
+		}
+		return p_instance;
+	}
+ 
+protected:
+    ${2:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`}(){}
+
+private:
+	static boost::shared_ptr<${2:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`}> p_instance;
+};
+
+typedef boost::shared_ptr<${2:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`}> p${2:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`};
+
+}//end of namespace
+
+#include "${2:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`}.h"
+
+using namespace $1;
+
+p${2:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`} ${2:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`}::p_instance;
+
+#endif /*$3*/

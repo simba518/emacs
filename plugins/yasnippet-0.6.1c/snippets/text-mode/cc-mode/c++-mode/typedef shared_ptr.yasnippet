@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: typedef shared_ptr
+# key: defptr
+# --
+typedef boost::shared_ptr< ${1:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`} > p$1; $0

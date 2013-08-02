@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: add initfile element
+# key: iniele
+# --
+${1:string} ${2:ele_name};
+$0
+$1 get_$2()const{
+   return $2;
+}
+BaseInitFile::print("$2",$2);
+BaseInitFile::clear($2);
+valid &= BaseInitFile::valid("$2",$2);
+read_succ &= BaseInitFile::read("$2",$2);

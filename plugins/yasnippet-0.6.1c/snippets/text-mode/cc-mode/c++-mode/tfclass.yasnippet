@@ -1,0 +1,26 @@
+# -*- mode: snippet -*-
+# name: template class with file name
+# key: tfclass
+# --
+#ifndef ${3:_`(upcase (file-name-nondirectory (file-name-sans-extension (buffer-file-name))))`_H_}
+#define $3
+
+namespace ${1:LSW_}{
+
+template <typename real>
+class ${2:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`}{
+
+public:
+${2:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`}(){}
+ 
+~${2:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`}(){}
+
+protected:
+
+private:
+
+};
+
+}//end of namespace
+
+#endif /*$3*/

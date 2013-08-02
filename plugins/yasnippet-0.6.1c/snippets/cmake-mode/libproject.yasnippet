@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: libproject
+# key: libproj
+# --
+PROJECT(${1:project_name})
+
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+
+SET(LIBRARY_OUTPUT_PATH \${PROJECT_SOURCE_DIR}/Lib)
+
+SET(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -O3 -Wall")
+
+SET(LIBRARY_NAME ${2:Name})
+
+AUX_SOURCE_DIRECTORY(${3:.} $2_src)
+
+ADD_LIBRARY(\${LIBRARY_NAME} SHARED \${$2_src})

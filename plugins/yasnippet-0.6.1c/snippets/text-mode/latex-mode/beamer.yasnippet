@@ -1,0 +1,32 @@
+# -*- mode: snippet -*-
+# name: beamer
+# key: beamer
+# --
+\documentclass{beamer}
+\usetheme{Madrid}
+
+%--- title information --------------------------%
+\title[$1]{${1:main title}}
+\subtitle[$2]{${2:subtitle}}
+\author[S.W.Li]{Siwang Li}
+\institute[ZJU]{
+  State Key Lab of CAD\&CG\\\
+  Zhejiang University\\\[1ex]
+  \texttt{lisiwangcg@gmail.com}
+}
+
+\begin{document}
+
+%--- the titlepage frame -------------------------%
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+%--- the presentation begins here ----------------%
+\begin{frame}{Overview}
+${3:item}
+\end{frame}
+
+
+
+\end{document}

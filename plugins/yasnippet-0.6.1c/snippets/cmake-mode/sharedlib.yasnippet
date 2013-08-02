@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: sharedlib
+# key: lib
+# --
+
+SET(LIBRARY_NAME ${1:Name})
+
+AUX_SOURCE_DIRECTORY(${2:.} ${1:$(yas/substr text "[^: ]*")}_src)
+
+ADD_LIBRARY(\${LIBRARY_NAME} SHARED \${${1:$(yas/substr text "[^: ]*")}_src})$0

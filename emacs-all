@@ -192,6 +192,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;compile;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;code browsing;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; http://emacser.com/cedet.htm
 ;; cedet
 (add-to-list 'load-path "~/.emacs.d/plugins/cedet-1.0/common")
 (require 'cedet)
@@ -200,7 +201,8 @@
 (add-hook 'texinfo-mode-hook (lambda () (require 'sb-texinfo)))
 (semantic-load-enable-minimum-features)
 (semantic-load-enable-code-helpers)
-(semantic-load-enable-semantic-debugging-helpers)
+;; (semantic-load-enable-semantic-debugging-helpers)
+;; (global-semantic-show-unmatched-syntax-mode nil)
 (global-semantic-highlight-func-mode 1)
 (global-semantic-idle-local-symbol-highlight-mode 1)
 (setq semanticdb-default-save-directory "~/.emacs.d/tempt")
@@ -221,12 +223,14 @@
 (global-set-key [M-S-f12] 'semantic-analyze-proto-impl-toggle)
 
 
+(semantic-add-system-include "/usr/include" 'c++-mode)
+(semantic-add-system-include "/usr/include/cppunit" 'c++-mode)
+(semantic-add-system-include "/usr/include/QGLViewer" 'c++-mod)
+(semantic-add-system-include "/usr/include/boost" 'c++-mode)
 (semantic-add-system-include "/usr/local/include" 'c++-mode)
+(semantic-add-system-include "/usr/local/include/casadi" 'c++-mode)
 (semantic-add-system-include "/usr/local/include/utility" 'c++-mode)
 (semantic-add-system-include "/usr/local/include/commonfile" 'c++-mode)
-(semantic-add-system-include "~/Workspace/RodSkeleton/branches/simba/SRC/CoRDE" 'c++-mode)
-(semantic-add-system-include "~/Workspace/RodSkeleton/branches/simba/SRC/Skinning" 'c++-mode)
-(semantic-add-system-include "~/Workspace/RodSkeleton/branches/simba/SRC/CoRDEApp" 'c++-mode)
 
 ;;folding
 (add-hook 'c-mode-hook 'hs-minor-mode)

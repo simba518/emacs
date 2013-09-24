@@ -12,7 +12,7 @@
 (setq frame-title-format '("%S" (buffer-file-name "%f" (dired-directory dired-directory "%b"))))
 (setq default-tab-width 4)
 (setq tab-width 4 indent-tabs-mode nil)
-(setq default-directory "~/Workspace/PathControl/")
+(setq default-directory "~/Workspace/AnimationEditor")
 (setq inhibit-startup-message t)
 (setq default-fill-column 80)
 (setq-default kill-whole-line t)
@@ -222,15 +222,24 @@
             (semantic-mrub-switch-tags first))))
 (global-set-key [M-S-f12] 'semantic-analyze-proto-impl-toggle)
 
-
-(semantic-add-system-include "/usr/include" 'c++-mode)
-(semantic-add-system-include "/usr/include/cppunit" 'c++-mode)
-(semantic-add-system-include "/usr/include/QGLViewer" 'c++-mod)
-(semantic-add-system-include "/usr/include/boost" 'c++-mode)
-(semantic-add-system-include "/usr/local/include" 'c++-mode)
-(semantic-add-system-include "/usr/local/include/casadi" 'c++-mode)
-(semantic-add-system-include "/usr/local/include/utility" 'c++-mode)
-(semantic-add-system-include "/usr/local/include/commonfile" 'c++-mode)
+(load-file "~/Workspace/AnimationEditor/project.el")
+(setq cedet-sys-include-dirs (list
+							  "/usr/include"
+							  "/usr/local/include"
+							  "/usr/include/boost"
+							  "/usr/include/QGLViewer"
+							  "/usr/local/include/casadi"
+							  "/usr/local/include/utility"
+							  "/usr/local/include/commonfile"
+							  "/usr/local/include/eigen3/Eigen"
+							  "/usr/local/include/eigen3/Eigen/src/Core"
+							  ))
+(let ((include-dirs cedet-user-include-dirs))
+(setq include-dirs (append include-dirs cedet-sys-include-dirs))
+(mapc (lambda (dir)
+		(semantic-add-system-include dir 'c++-mode)
+		(semantic-add-system-include dir 'c-mode))
+	  include-dirs))
 
 ;;folding
 (add-hook 'c-mode-hook 'hs-minor-mode)

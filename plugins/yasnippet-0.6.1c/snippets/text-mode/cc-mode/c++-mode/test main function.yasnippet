@@ -2,9 +2,5 @@
 # name: test main function
 # key: testmain
 # --
-#include <main_test.h>
-
-int main(int argc, char *argv[]){
-
-  return LSW_TEST::main_test(argc,argv);
-}
+#define BOOST_TEST_MODULE "C++ Unit Tests for $1 Lib"
+#include <boost/test/included/unit_test.hpp>

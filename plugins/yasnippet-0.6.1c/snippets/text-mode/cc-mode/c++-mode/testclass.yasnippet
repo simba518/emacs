@@ -1,58 +1,18 @@
 # -*- mode: snippet -*-
-# name: testclass
-# key: testclass
+# name: test
+# key: test
 # --
-#ifndef ${3:_`(upcase (file-name-nondirectory (file-name-sans-extension (buffer-file-name))))`_H_}
-#define $3
-
-#include <MyTestFixture.h>
-
-namespace LSW_TEST{
-
-class ${2:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`}:public MyTestFixture{
-
-public:
-		CPPUNIT_TEST_SUITE(${2:$(yas/substr text "[^: ]*")});
-		
-		CPPUNIT_TEST($1);
-
-		CPPUNIT_TEST_SUITE_END();		
-
-public:
-	void ${1:testfun}();
-
-private:
-
-
-};
-
-}//end of namespace
-
-#endif /*$3*/
-
-#include <iostream>
-using namespace std;
-
+#include <boost/test/unit_test.hpp>
+#include <UnitTestAssert.h>
 #include <eigen3/Eigen/Dense>
-using namespace Eigen;
-
 #include <`(subseq (file-name-nondirectory( file-name-sans-extension (buffer-file-name) ) ) 0 ( - (length (file-name-nondirectory( file-name-sans-extension (buffer-file-name)) )) 4))`.h>
-using namespace $0;
+using namespace Eigen;
+using namespace $1;
 
-#include <AssertMacrosExt.h>
-#include "$2.h"
-using namespace LSW_TEST;
+BOOST_AUTO_TEST_SUITE(${`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`})
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION($2,"`(subseq (file-name-nondirectory( file-name-sans-extension (buffer-file-name) ) ) 0 ( - (length (file-name-nondirectory( file-name-sans-extension (buffer-file-name) ))
-) 4) )`");
-
-CPPUNIT_TEST_SUITE_REGISTRATION($2);
-
-void $2::$1(){
-  
-  MyTestFixture::print("$2::$1 begin");
-
-  CPPUNIT_ASSERT(false);
-
-  MyTestFixture::print("$2::$1 end");
+BOOST_AUTO_TEST_CASE(${2:testfun}){
+ $3
 }
+
+BOOST_AUTO_TEST_SUITE_END()

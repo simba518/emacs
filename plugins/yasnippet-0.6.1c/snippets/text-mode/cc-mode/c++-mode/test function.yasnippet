@@ -2,15 +2,6 @@
 # name: test function
 # key: testfun
 # --
-void ${1:testfun}();
+BOOST_AUTO_TEST_CASE(${1:testfun}){
 
-CPPUNIT_TEST($1);
-
-void ${2:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`}::$1(){
-  
-  MyTestFixture::print("$2::$1 begin");
-
-  CPPUNIT_ASSERT(false);
-
-  MyTestFixture::print("$2::$1 end");
 }

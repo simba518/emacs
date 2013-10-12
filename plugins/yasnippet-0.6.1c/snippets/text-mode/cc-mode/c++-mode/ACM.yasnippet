@@ -1,0 +1,58 @@
+# -*- mode: snippet -*-
+# name: ACM
+# key: acm
+# --
+#include<stdio.h>
+#include<string>
+#include<math.h>
+#include<stdlib.h>
+#include<set>
+#include<bitset>
+#include<map>
+#include<vector>
+#include<string.h>
+#include<algorithm>
+#include<iostream>
+#include<queue>
+#include<sstream>
+#include <assert.h>
+using namespace std;
+
+typedef long long int LINT;
+
+#define SZ(X) ((int)(X).size())
+#define ALL(X) (X).begin(), (X).end()
+
+#define VAR(a,b) __typeof(b) a=(b)
+#define FOREACH(it,c) for(VAR(it,(c).begin());it!=(c).end();++it)
+
+#define REP(I, N) for (int I = 0; I < (N); ++I)
+#define REPP(I, A, B) for (int I = (A); I < (B); ++I)
+
+#define MS0(X) memset((X), 0, sizeof((X)))
+#define MS1(X) memset((X), -1, sizeof((X)))
+
+#define REVERT(v,i) v[v.size()-i-1]
+
+/*------------------------------------------------------*/
+
+void solve();
+
+int main(int argc, char *argv[]){
+  
+  freopen("./in.txt","r",stdin);
+  // freopen("./out.txt","w",stdout);
+  
+  int caseNum,caseId = 0;
+  scanf("%d", &caseNum);
+  while(caseNum--){
+	cout << "Case #"<<++caseId<<": ";
+	solve();
+	cout << endl;
+  }
+  return 0;
+}
+
+void solve(){
+  $0
+}

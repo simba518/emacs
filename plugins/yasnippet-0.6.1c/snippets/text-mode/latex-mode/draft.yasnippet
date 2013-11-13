@@ -2,20 +2,18 @@
 # name: draft
 # key: draft
 # --
-\documentclass[twocolumn,a4paper]{article}
-\usepackage{graphicx}
-\usepackage{amsfonts}
+\documentclass[9pt,twocolumn]{extarticle}
+
+\usepackage[hmargin=0.5in,tmargin=0.5in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{times}
+
+\usepackage{cleveref}
 \usepackage{color}
-\usepackage{lineno}
-\setlength{\columnsep}{10pt}
-\setlength{\oddsidemargin}{0pt}
-\setlength{\topmargin}{0pt}
-\setlength{\headheight}{0pt}
-\setlength{\headsep}{0pt}
-\setlength{\marginparsep}{0pt}
-\setlength{\marginparwidth}{0pt}
-\addtolength{\voffset}{-50pt}
-\setlength{\textheight}{26.8cm}
+\newcommand{\TODO}[1]{\textcolor{red}{#1}}
+
+\newcommand{\FPP}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\argmin}{\operatornamewithlimits{arg\ min}}
 \author{Siwang Li}
 
 \title{${1:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`}}
@@ -23,6 +21,8 @@
 %% document begin here
 \begin{document}
 \maketitle
+
+\setlength{\parskip}{0.5ex}
 
 \section{Introduction}
 $0

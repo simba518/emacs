@@ -1,0 +1,20 @@
+# -*- mode: snippet -*-
+# name: applib
+# key: app
+# --
+SET(APP_NAME ${1:Name})
+
+AUX_SOURCE_DIRECTORY(${2:.} ${1:$(yas/substr text "[^: ]*")}_src)
+
+ADD_EXECUTABLE(\${APP_NAME\} 
+  \${${1:$(yas/substr text "[^: ]*")}_src}
+  )
+
+TARGET_LINK_LIBRARIES(\${APP_NAME\}
+
+  \${Boost_LIBRARIES\}
+  \${ARPACK_LIBRARIES\}
+  \${SUPERLU2.0_LIBRARIES\}
+  \${LAPACK_LIBRARIES\}
+  \${SUITESPARSE_LIBRARIES\}
+)

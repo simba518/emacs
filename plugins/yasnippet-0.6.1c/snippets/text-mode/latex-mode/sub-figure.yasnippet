@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: sub-figure
+# key: sfig
+# --
+\begin{figure}
+  \centering
+
+  \subfigure[ ] { \label{fig:a}
+  \includegraphics[width=0.48\textwidth]{${1:./figures/}}}
+
+  \subfigure[ ] { \label{fig:b}
+  \includegraphics[width=0.48\textwidth]{$1}}
+
+  \caption{$2}
+  \label{$1}
+\end{figure}

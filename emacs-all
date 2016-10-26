@@ -357,6 +357,15 @@
 (add-hook 'LaTeX-mode-hook(lambda()	(local-set-key (kbd "C-c C-p") 'reftex-parse-all)))
 ;;;;;;;;;;;;;;;;;;;;;;;;latex;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; python jedi
+;; http://lavenliu.blog.51cto.com/5060944/1663780
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(autoload 'jedi:setup "jedi" nil t)
+(add-hook 'python-mode-hook 'jedi:ac-setup)
+(setq jedi:complete-on-dot t)
+(setq jedi:setup-keys t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;custom-set;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (custom-set-faces
   ;; custom-set-faces was added by Custom.

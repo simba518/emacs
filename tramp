@@ -1,4 +1,4 @@
-;; -*- emacs-lisp -*- <15/04/27 19:04:03 /home/simba/.emacs.d/tramp>
+;; -*- emacs-lisp -*- <16/08/31 12:31:01 /home/simba/.emacs.d/tramp>
 ;; Tramp connection history.  Don't change this file.
 ;; You can delete it, forcing Tramp to reapply the checks.
 
@@ -15,7 +15,7 @@
   ("uid-integer" 0)
   ("readlink" "\\readlink"))
  (["sudo" "root" "localhost" nil nil]
-  ("uname" "Linux 3.16.0-34-generic")
+  ("uname" "Linux 3.16.0-77-generic")
   ("test" "test")
   ("remote-path"
    ("/bin" "/usr/bin" "/sbin" "/usr/sbin" "/usr/local/bin" "/usr/local/sbin"))

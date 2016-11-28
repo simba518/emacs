@@ -1,0 +1,5 @@
+(provide 'hello)
+(defun hello()
+  (interactive)
+  (insert "hello world")
+)

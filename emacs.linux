@@ -1,0 +1,441 @@
+;; eval-buffer
+
+;;;;;;;;;;;;;;;;;;;;;;;;basis;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq x-select-enable-clipboard t)
+(global-font-lock-mode t)
+(auto-image-file-mode t)
+(fset 'yes-or-no-p 'y-or-n-p)
+(column-number-mode t)
+(show-paren-mode t)
+(display-time-mode 1)
+(setq display-time-24hr-format t)
+(setq display-time-day-and-date t)
+(mouse-avoidance-mode 'animate)
+(setq frame-title-format '("%S" (buffer-file-name "%f" (dired-directory dired-directory "%b"))))
+(setq default-tab-width 4)
+(setq tab-width 4 indent-tabs-mode nil)
+(setq default-directory "~/Workspace/")
+(setq inhibit-startup-message t)
+(setq default-fill-column 80)
+(setq-default kill-whole-line t)
+(setq scroll-step 1
+	  scroll-margin 5
+	  scroll-conservatively 10000)
+(blink-cursor-mode -1)
+(windmove-default-keybindings 'meta);;M+direction keyboard to jump between windows
+(savehist-mode 1)
+
+(defun set-exec-path-from-shell-PATH ()
+  (let ((path-from-shell (replace-regexp-in-string
+                          "[ \t\n]*$"
+                          ""
+                          (shell-command-to-string "$SHELL --login -i -c 'echo $PATH'"))))
+    (setenv "PATH" path-from-shell)
+    (setq eshell-path-env path-from-shell) ; for eshell users
+    (setq exec-path (split-string path-from-shell path-separator))))
+
+(when window-system (set-exec-path-from-shell-PATH))
+
+;; color-theme
+(add-to-list 'load-path "~/.emacs.d/plugins/color-theme-6.6.0")
+(require 'color-theme)
+(color-theme-initialize)
+;; (color-theme-gnome2) 
+(color-theme-dark-laptop)
+(set-default-font "DejaVu Sans Mono-13") ;;font
+(setq-default make-backup-files nil) ;;no tempt files
+
+;;.h .cu .hcpp as .cpp  
+(setq auto-mode-alist  (cons '("\\.h$" . c++-mode)    auto-mode-alist))
+(setq auto-mode-alist  (cons '("\\.cu$" . c++-mode)    auto-mode-alist))
+(setq auto-mode-alist  (cons '("\\.hcpp$" . c++-mode)    auto-mode-alist))
+
+;;set replace
+(global-set-key "\C-xr" 'replace-string)
+(setq-default case-replace nil)
+
+;;open eshell: ctrl+x e
+(global-set-key "\C-xe" 'eshell)
+
+;;open ibuffer: ctrl+x ctrl+b
+(global-set-key "\C-x\C-b" 'ibuffer)
+
+;;create/find file
+(global-set-key "\C-xf" 'find-file)
+
+;;hiding bars
+(tool-bar-mode 0)
+(menu-bar-mode 0)
+(scroll-bar-mode 0)
+(global-set-key [\C-f1] 'menu-bar-mode)
+
+;;clear eshell
+(defun eshell/clear ()
+  "Clears the shell buffer ala Unix's clear or DOS' cls"
+  (interactive)  ;; the shell prompts are read-only, so clear that for the duration
+  (let ((inhibit-read-only t))	;; simply delete the region
+	(delete-region (point-min) (point-max))))
+
+(defun eshell/cl () ;; similar to clear
+  (interactive)
+  (let ((inhibit-read-only t))
+	(delete-region (point-min) (point-max))))
+
+;;disable ctrl + z
+(global-set-key "\C-z" nil)
+
+;;set ctrl+c q to quit emacs
+(global-set-key "\C-x\C-c" nil)
+(global-set-key "\C-cwq" 'save-buffers-kill-terminal)
+
+;; set spell check, use M-x flyspell-mode to open it
+(setq-default ispell-program-name "aspell")
+;;;;;;;;;;;;;;;;;;;;;;;;basis;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;pair;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun my-c-mode-auto-pair ()
+  (interactive)
+  (make-local-variable 'skeleton-pair-alist)
+  (setq skeleton-pair-alist '( (?{ \n > _ \n ?} >) ) )
+  (setq skeleton-pair t)
+  (local-set-key (kbd "{") 'skeleton-pair-insert-maybe) )
+(add-hook 'c-mode-hook 'my-c-mode-auto-pair)
+(add-hook 'c++-mode-hook 'my-c-mode-auto-pair)
+;;;;;;;;;;;;;;;;;;;;;;pair;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;fullscreen;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;http://hi.baidu.com/jiyeqian/blog/item/affe4e99562ea00e6f068c76.html
+;;toggle-fullscreen
+(defun toggle-fullscreen (&optional f)
+  (interactive)
+  (let ((current-value (frame-parameter nil 'fullscreen)))
+	(set-frame-parameter nil 'fullscreen
+						 (if (equal 'fullboth current-value)
+							 (if (boundp 'old-fullscreen) old-fullscreen nil)
+						   (progn (setq old-fullscreen current-value)
+								  'fullboth)))))
+(global-set-key [\C-f3] 'toggle-fullscreen) 
+
+;;maxsize window
+(defun my-maximized ()
+  (interactive)
+  (x-send-client-message
+   nil 0 nil "_NET_WM_STATE" 32
+   '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))
+  (x-send-client-message
+   nil 0 nil "_NET_WM_STATE" 32
+   '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0)) )
+(when window-system (my-maximized) (global-set-key [\C-f4] 'my-maximized)  )
+;;;;;;;;;;;;;;;;;;;;;;fullscreen;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;ibus;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;Chinese input method
+(add-to-list 'load-path  "~/.emacs.d/plugins/ibus")
+(require 'ibus)
+(add-hook 'after-init-hook 'ibus-mode-on) ;; Turn on ibus-mode automatically.
+(ibus-define-common-key ?\C-\s nil) ;; Use C-SPC for Set Mark command
+(ibus-define-common-key ?\C-/ nil) ;; Use C-/ for Undo command
+;;;;;;;;;;;;;;;;;;;;;;ibus;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;yasnippet;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-to-list 'load-path  "~/.emacs.d/plugins/yasnippet-0.6.1c")
+(require 'yasnippet)
+(yas/initialize)
+(yas/load-directory "~/.emacs.d/plugins/yasnippet-0.6.1c/snippets")
+;;;;;;;;;;;;;;;;;;;;;;;;yasnippet;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;dired;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;dired: dir first
+(defun mydired-sort ()
+  "Sort dired listings with directories first."
+  (save-excursion
+    (let (buffer-read-only)
+      (forward-line 2) ;; beyond dir. header 
+      (sort-regexp-fields t "^.*$" "[ ]*." (point) (point-max)))
+    (set-buffer-modified-p nil)))
+(defadvice dired-readin
+  (after dired-after-updating-hook first () activate)
+  "Sort dired listings with directories first before adding marks."
+  (mydired-sort))
+;;dired: go to parent dir
+(add-hook 'dired-mode-hook (lambda ()
+							 (interactive)
+							 (define-key dired-mode-map (kbd "M-p" ) 'dired-up-directory)))
+;;disable print command P
+(add-hook 'dired-mode-hook (lambda () (interactive)(define-key dired-mode-map (kbd "P" ) nil)))
+;;hide details
+(add-to-list 'load-path "~/.emacs.d/plugins/dired/")
+(require 'dired-details)
+(dired-details-install)
+;;hide files
+(require 'dired-x)
+(add-hook 'dired-mode-hook  (lambda ()
+            (setq dired-omit-files "^#\\|^\\..*")
+            (dired-omit-mode 1)))
+;;;;;;;;;;;;;;;;;;;;;;;;dired;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;external-app;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; use "! ret" to run the associated program in Dired Mode
+;; http://www.cqumzh.cn/uchome/space.php?uid=373&do=blog&id=141722
+(require 'dired-x)
+(setq dired-guess-shell-alist-user
+	  '(    
+		(".pdf" "okular * &")          
+		(".PDF" "okular * &")
+		(".htm[l]" "firefox * &")
+		(".ogv" "totem * &")
+		(".rmvb" "totem * &")
+		(".RMVB" "totem * &")
+		(".avi" "totem * &")
+		(".mpeg" "totem * &")
+		)
+	  )
+;;;;;;;;;;;;;;;;;;;;;;external-app;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;compile;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun yao-onekey-compile ()
+  "Save buffers and start compile"
+  (interactive)
+  (save-some-buffers t)
+  (switch-to-buffer-other-window "*compilation*")
+  (compile compile-command))
+(global-set-key [C-f7] 'compile)
+(global-set-key [f7] 'yao-onekey-compile)
+;;;;;;;;;;;;;;;;;;;;;;compile;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;code browsing;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;; http://emacser.com/cedet.htm
+;; ;; cedet
+;; (add-to-list 'load-path "~/.emacs.d/plugins/cedet-1.0/common")
+;; (require 'cedet)
+;; (require 'eassist nil 'noerror)
+;; (define-key global-map [M-f11] 'eassist-switch-h-cpp) ;;jump between .h and .cpp
+;; (add-hook 'texinfo-mode-hook (lambda () (require 'sb-texinfo)))
+;; (semantic-load-enable-minimum-features)
+;; (semantic-load-enable-code-helpers)
+;; ;; (semantic-load-enable-semantic-debugging-helpers)
+;; ;; (global-semantic-show-unmatched-syntax-mode nil)
+;; (global-semantic-highlight-func-mode 1)
+;; (global-semantic-idle-local-symbol-highlight-mode 1)
+;; (setq semanticdb-default-save-directory "~/.emacs.d/tempt")
+
+;; (global-set-key [f12] 'semantic-ia-fast-jump)
+;; (global-set-key [S-f12] 				;jump back
+;;             (lambda ()
+;;             (interactive)
+;;             (if (ring-empty-p (oref semantic-mru-bookmark-ring ring))
+;;             (error "Semantic Bookmark ring is currently empty"))
+;;             (let* ((ring (oref semantic-mru-bookmark-ring ring))
+;;             (alist (semantic-mrub-ring-to-assoc-list ring))
+;;             (first (cdr (car alist))))
+;;             (if (semantic-equivalent-tag-p (oref first tag)
+;;             (semantic-current-tag))
+;;             (setq first (cdr (car (cdr alist)))))
+;;             (semantic-mrub-switch-tags first))))
+;; (global-set-key [M-S-f12] 'semantic-analyze-proto-impl-toggle)
+
+;; (load-file "~/Workspace/AnimationEditor/project.el")
+;; (setq cedet-sys-include-dirs (list
+;; 							  "/usr/include"
+;; 							  "/usr/local/include"
+;; 							  "/usr/include/boost"
+;; 							  "/usr/include/QGLViewer"
+;; 							  "/usr/local/include/casadi"
+;; 							  "/usr/local/include/utility"
+;; 							  "/usr/local/include/commonfile"
+;; 							  "/usr/local/include/eigen3/Eigen"
+;; 							  "/usr/local/include/eigen3/Eigen/src/Core"
+;; 							  ))
+;; (let ((include-dirs cedet-user-include-dirs))
+;; (setq include-dirs (append include-dirs cedet-sys-include-dirs))
+;; (mapc (lambda (dir)
+;; 		(semantic-add-system-include dir 'c++-mode)
+;; 		(semantic-add-system-include dir 'c-mode))
+;; 	  include-dirs))
+
+;;folding
+(add-hook 'c-mode-hook 'hs-minor-mode)
+(add-hook 'c++-mode-hook 'hs-minor-mode)
+(add-hook 'js-mode-hook 'hs-minor-mode)
+(add-hook 'python-mode-hook 'hs-minor-mode)
+(add-hook 'latex-mode-hook 'hs-minor-mode)
+(add-hook 'hs-minor-mode-hook
+		  (lambda()	(global-set-key (kbd "\C-x,") 'hs-hide-block)
+			(global-set-key (kbd "\C-x.") 'hs-show-block)
+			(global-set-key (kbd "\C-x<") 'hs-hide-level)
+			(global-set-key (kbd "\C-x>") 'hs-show-all)	)  )
+;;;;;;;;;;;;;;;;;;;;;;code browsing;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;maxima;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;http://www.emacswiki.org/emacs/MaximaMode
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/maxima/")
+(require 'imaxima)
+(when window-system
+  (custom-set-variables
+   '(imaxima-fnt-size "tiny")            ;字体大小
+   '(imaxima-max-scale 0.75)             ;表达式最大比例
+   '(imaxima-pt-size 5)                  ;点大小
+   ;; 高亮括号结构
+   '(hl-paren-colors (quote ("Cyan"   
+							 "Gold"   
+							 "Red"    
+							 )))
+   '(smiley-style (quote medium))         ;笑脸的风格, 中等, 10种颜色
+   ) )
+(autoload 'imaxima "imaxima" "Image support for Maxima." t)
+(autoload 'imath-mode "imath" "Interactive Math minor mode." t)
+;;;;;;;;;;;;;;;;;;;;;;;;maxima;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;org;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+(global-set-key "\C-ca" 'org-agenda) ;; agenda
+(setq org-log-done 'time) ;; tags
+;; see http://www.cnblogs.com/Open_Source/archive/2011/07/17/2108747.html#sec-9
+(setq org-capture-templates ;; org-capture
+	  '(("t" "Todo" entry (file+headline "~/Documents/mymind/GTD/gtd.org" "Todo List")
+		 "* TODO %?\n %i %u")
+		("s" "Someday" entry (file+headline "~/Documents/mymind/GTD/someday.org" "Someday")
+		 "* TODO %?\n %i %u")
+		("n" "Note" entry (file+headline "~/Documents/mymind/GTD/note.org" "Note")
+		 "* %?\n %i %u"))  )
+(define-key global-map "\C-cc" 'org-capture)
+(setq org-return-follows-link t) ;; return to activate a link
+;; days
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(hl-paren-colors (quote ("Cyan" "Gold" "Red")))
+ '(imaxima-fnt-size "huge")
+ '(imaxima-max-scale 0.75)
+ '(imaxima-pt-size 12)
+ '(max-specpdl-size 2080)
+ '(org-agenda-files (quote ("~/Documents/mymind/GTD/project.org" "~/Documents/mymind/GTD/gtd.org")) t)
+ '(org-agenda-ndays 7)
+ '(org-agenda-show-all-dates t)
+ '(org-agenda-skip-deadline-if-done t)
+ '(org-agenda-skip-scheduled-if-done t)
+ '(org-agenda-start-on-weekday nil)
+ '(org-agenda-tags-column -120)
+ '(org-deadline-warning-days 7)
+ '(org-tags-column -100)
+ '(semanticdb-project-roots (quote ("/home/simba/Workspace/RodSkeleton/branches/simba")))
+ '(smiley-style (quote medium)))
+;; today's agend
+(define-key global-map "\M-i" 'org-agenda-goto-today)
+(add-hook 'org-mode-hook 'flyspell-mode)
+;; 自动换行
+(add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
+;; Mobileorg
+;; http://80kv.com/articles/mobile-org-configuration.html
+(setq org-directory "~/Documents/mymind/GTD/")
+(setq org-mobile-directory "~/Dropbox/MobileOrg/")
+(setq org-mobile-inbox-for-pull "~/Documents/mymind/GTD/mobile-inbox.org")
+(setq org-mobile-files '("~/Documents/mymind/GTD/project.org" "~/Documents/mymind/GTD/gtd.org"))
+(setq org-agenda-custom-commands
+      '(("z" "All TODO" todo "TODO")
+        ("x" "Agenda" agenda "")))
+;;;;;;;;;;;;;;;;;;;;;;;;org;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;latex;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;http://bbs.ctex.org/viewthread.php?tid=48282&extra=page%3D1
+(add-hook 'LaTeX-mode-hook(lambda()	(TeX-PDF-mode t)
+							(setq TeX-save-query  nil )
+							(setq TeX-show-compilation f)))
+;;增加 math, reftex 等模式，有数学符号的栏目辅助输入等等
+(add-hook 'LaTeX-mode-hook
+		  (lambda ()(flyspell-mode)
+			(LaTeX-math-mode)
+			(turn-on-reftex)
+			(turn-on-auto-fill)	))
+;;用 okular 预览 pdf http://emacser.com/auctex.htm
+(setq TeX-view-program-list '(  ("Okular" "okular --unique %o"))  )
+(add-hook 'LaTeX-mode-hook  (lambda ()
+			(setq TeX-view-program-selection '((output-pdf "Okular")
+											   (output-dvi "Okular")))))
+;; set RefTeX
+(require 'reftex)
+(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+(setq reftex-plug-into-AUCTeX t)
+(setq reftex-enable-partial-scans t)
+(setq reftex-save-parse-info t)
+(setq reftex-use-multiple-selection-buffers t)
+(autoload 'reftex-mode "reftex" "RefTeX Minor Mode" t)
+(autoload 'turn-on-reftex "reftex" "RefTeX Minor Mode" nil)
+(autoload 'reftex-citation "reftex-cite" "Make citation" nil)
+(autoload 'reftex-index-phrase-mode "reftex-index" "Phrase mode" t)
+(setq reftex-toc-split-windows-horizontally t)
+(setq reftex-toc-split-windows-fraction 0.2)
+(add-hook 'LaTeX-mode-hook(lambda()	(local-set-key (kbd "C-c C-p") 'reftex-parse-all)))
+;;;;;;;;;;;;;;;;;;;;;;;;latex;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; python jedi
+;; http://lavenliu.blog.51cto.com/5060944/1663780
+;; (require 'package)
+;; (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+;; (autoload 'jedi:setup "jedi" nil t)
+(setq jedi:setup-keys t)
+(setq jedi:complete-on-dot t)
+(add-hook 'python-mode-hook 'jedi:setup)
+
+;;;;;;;;;;;;;;;;;;;;;;;;custom-set;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ )
+(put 'erase-buffer 'disabled nil)
+(put 'dired-find-alternate-file 'disabled nil)
+
+;; lisp
+;; self-defined commands
+;; http://www.openhacktech.com/%3Fp%3D105
+;; http://emacs-doctor.com/learn-emacs-lisp-in-15-minutes.html
+(defun preset() 
+  (interactive)
+  (progn (goto-char (point-min)) 
+		 (while (search-forward "s:" nil t)
+		   (replace-match "/home/simba/fileserver" 'fixedcase t))
+         (goto-char (point-min))
+		 (while (search-forward "\\\\" nil t)
+		   (replace-match "/"))
+		 )
+  )
+
+(defun org-html-email()
+  (interactive)
+  (progn (org-html-export-as-html)
+         (goto-char (point-min)) 
+		 (while (search-forward ">DONE<" nil t)
+		   (replace-match "><font color=\"#339966\"><b>DONE</b></font><" 'fixedcase t))
+         (goto-char (point-min))
+         (while (search-forward ">ONGOING<" nil t)
+		   (replace-match "><font color=\"#ff9900\"><b>ONGOING</b></font><" 'fixedcase t))
+         (goto-char (point-min))
+         (while (search-forward ">TODO<" nil t)
+		   (replace-match "><font color=\"#ff0000\"><b>TODO</b></font><" 'fixedcase t))
+         (goto-char (point-min))
+         (while (search-forward "Table of Contents" nil t)
+		   (replace-match "内容提纲" 'fixedcase t))
+         (goto-char (point-min))
+         (while (search-forward "<a href" nil t)
+		   (replace-match "<aa href-non-use" 'fixedcase t))
+         (goto-char (point-min))         
+         (while (search-forward "1. 上周主要工作" nil t)
+		   (replace-match "<b>1. 上周主要工作</b>" 'fixedcase t))
+         (goto-char (point-min))         
+         (while (search-forward "2. 本周主要任务" nil t)
+		   (replace-match "<b>2. 本周主要任务</b>" 'fixedcase t))
+         (goto-char (point-min))         
+         (while (search-forward "3. 其他任务" nil t)
+		   (replace-match "<b>3. 其他任务</b>" 'fixedcase t))
+         (goto-char (point-min))         
+  )
+)

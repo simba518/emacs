@@ -1,4 +1,3 @@
-/home/simba/Workspace/prediction2/train/resnet101-mul
 /home/simba/Workspace/prediction2/train/resnet101-mul-refine
 /home/simba/Workspace/prediction2-tempt
 /home/simba/Workspace/prediction2-tempt/script
@@ -23,11 +22,9 @@
 /home/simba/Workspace/HatDetection/src
 /home/simba/Workspace/HatDetection/src/build
 /home/simba/Workspace/prediction/train/resnet50
-/home/simba/Workspace/prediction
-/home/simba/Workspace/prediction
-/home/simba/Workspace/prediction
-~/Workspace
-/home/simba/Workspace/prediction
 /home/simba/Workspace/prediction/script
 /home/simba/.emacs.d/.python-environments.bak
 /home/simba/.emacs.d/.python-environments
+~/Workspace
+/home/simba/Workspace/prediction
+/home/simba/.emacs.d

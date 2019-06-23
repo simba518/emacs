@@ -1,10 +1,9 @@
 ;;; jedi-autoloads.el --- automatically extracted autoloads
 ;;
 ;;; Code:
-
+(add-to-list 'load-path (or (file-name-directory #$) (car load-path)))
 
-;;;### (autoloads (jedi:auto-complete-mode jedi:complete jedi:ac-setup)
-;;;;;;  "jedi" "jedi.el" (22544 12799 137139 842000))
+;;;### (autoloads nil "jedi" "jedi.el" (22544 18809 668230 496000))
 ;;; Generated autoloads from jedi.el
 
 (autoload 'jedi:ac-setup "jedi" "\
@@ -35,15 +34,9 @@ Complete code at point.
 
 ;;;***
 
-;;;### (autoloads nil nil ("jedi-pkg.el") (22544 12799 188203 973000))
-
-;;;***
-
-(provide 'jedi-autoloads)
 ;; Local Variables:
 ;; version-control: never
 ;; no-byte-compile: t
 ;; no-update-autoloads: t
-;; coding: utf-8
 ;; End:
 ;;; jedi-autoloads.el ends here
